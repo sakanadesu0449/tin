@@ -33,7 +33,7 @@ public:
 
 	bool FileIOInit(const std::string filepath);
 	bool ReadFromJsonFile();
-	bool WriteToJsonFile();
+	bool WriteToJsonFile(const nlohmann::json _updates);
 
 protected:
 	std::unique_ptr<std::ifstream> file_stream;
