@@ -19,11 +19,11 @@ bool ABCJsonHandler::FileIOInit(const std::string& filepath, const bool rwtype) 
 		std::cerr << "Unkknown error" << std::endl;
 	}
 	if (rwtype) {
-		auto file_stream = std::make_unique<std::ifstream>(filepath);
+		file_stream_r = std::make_unique<std::ifstream>(filepath);
 	} else {
-		auto file_stream = std::make_unique<std::ofstream>(filepath);
+		file_stream_w = std::make_unique<std::ofstream>(filepath);
 	}
-	if (!file_stream->is_open()) {
+	if (!file_stream_r->is_open()) {
 		std::cerr << "Failed open File: " << filepath << std::endl;
 		return false;
 	}
@@ -42,7 +42,7 @@ std::any ABCJsonHandler::json_to_any(const nlohmann::json& _j) {
 	} else if (_j.is_number_float()) {
 		return _j.get<double>();
 	} else if (_j.is_null()) {
-		return nullptr;
+		return 0;
 	} else if (_j.is_array()) {
 		std::vector<std::any> o_array;
 		for (const auto& i : _j) {
@@ -56,14 +56,23 @@ std::any ABCJsonHandler::json_to_any(const nlohmann::json& _j) {
 		}
 		return o_map;
 	} else {
-		throw std::runtime_error("Unsupported JSON type");
+		throw(std::runtime_error("err: unsuppost json type"));
 	}
 }
 
-UserProfile::UserProfile(const bool rwtype = true) {
+//ABCJsonHandler::~ABCJsonHandler() {
+//	if (file_stream && file_stream->is_open()) {
+//		file_stream->close();
+//	}
+//}
+
+UserProfile::UserProfile(const bool rwtype) {
 	FileIOInit(DEFAULT_PROFILE_PATH, rwtype);
 }
 
-std::variant<int, std::string, bool, float> UserProfile::load_config(const std::string& conf_key) {
-	*file_stream >> user_profile;
-}
+
+//std::any UserProfile::load_config(const std::string& conf_key) {
+//	*file_stream >> user_profile;
+//	const auto& _conf = json_to_any(user_profile[conf_key]);
+//	return _conf;
+//}
