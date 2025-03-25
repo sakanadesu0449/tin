@@ -6,7 +6,7 @@ MediaLib::MediaLib() {
 }
 
 void MediaLib::get_media_lib_paths() {
-    UserProfile _user_profile;
+    ReadUserProfile _user_profile;
     std::vector<std::any> _filepaths = _user_profile.load_config<std::vector<std::any>>("media_lib");
 
     for (const std::any& _path : _filepaths) {

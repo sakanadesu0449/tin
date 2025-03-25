@@ -2,7 +2,8 @@
 
 //Class Definition
 //
-bool ABCJsonHandler::file_exist_checker(const std::string filepath) {
+template <>
+bool ABCJsonHandler<std::fstream>::file_exist_checker(const std::string filepath) {
 	std::filesystem::path _filepath(filepath);
 	std::filesystem::path _parent = _filepath.parent_path();
 
@@ -14,23 +15,12 @@ bool ABCJsonHandler::file_exist_checker(const std::string filepath) {
 	}
 	return true;
 }
-bool ABCJsonHandler::FileIOInit(const std::string& filepath, const bool rwtype) {
-	if(!file_exist_checker(filepath)) {
-		std::cerr << "Unkknown error" << std::endl;
-	}
-	if (rwtype) {
-		file_stream_r = std::make_unique<std::ifstream>(filepath);
-	} else {
-		file_stream_w = std::make_unique<std::ofstream>(filepath);
-	}
-	if (!file_stream_r->is_open()) {
-		std::cerr << "Failed open File: " << filepath << std::endl;
-		return false;
-	}
-	return true;
-}
 
-std::any ABCJsonHandler::json_to_any(const nlohmann::json& _j) {
+
+
+
+template <>
+std::any ABCJsonHandler<std::fstream>::json_to_any(const nlohmann::json& _j) {
 	if (_j.is_number_integer()) {
 		return _j.get<int>();
 	} else if (_j.is_string()) {
@@ -42,7 +32,7 @@ std::any ABCJsonHandler::json_to_any(const nlohmann::json& _j) {
 	} else if (_j.is_number_float()) {
 		return _j.get<double>();
 	} else if (_j.is_null()) {
-		return 0;
+		return nullptr;
 	} else if (_j.is_array()) {
 		std::vector<std::any> o_array;
 		for (const auto& i : _j) {
@@ -60,14 +50,15 @@ std::any ABCJsonHandler::json_to_any(const nlohmann::json& _j) {
 	}
 }
 
-//ABCJsonHandler::~ABCJsonHandler() {
+//template <>
+//ABCJsonHandler<std::fstream>::~ABCJsonHandler() {
 //	if (file_stream && file_stream->is_open()) {
 //		file_stream->close();
 //	}
 //}
 
-UserProfile::UserProfile(const bool rwtype) {
-	FileIOInit(DEFAULT_PROFILE_PATH, rwtype);
+ReadUserProfile::ReadUserProfile() {
+	FileIOInit(DEFAULT_PROFILE_PATH);
 }
 
 

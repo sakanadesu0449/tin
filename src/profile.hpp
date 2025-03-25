@@ -29,37 +29,40 @@ const nlohmann::json DEFAULT_USER_PROFILE_JSON = nlohmann::json::parse(DEFAULT_U
 //Class Declaration
 //i
 //abc
+template <typename StreamType>
 class ABCJsonHandler {
 public:
-	//~ABCJsonHandler();
+	virtual ~ABCJsonHandler() = default;
 
-	//retype: True to read, False to write, default read
-	bool FileIOInit(const std::string& filepath, const bool rwtype);
-
-	bool ReadFromJsonFile();
-	bool WriteToJsonFile(const nlohmann::json _updates);
-
+	void FileIOInit(const std::string& filepath) {
+		file_exist_checker(filepath);
+		file_stream = std::make_unique<StreamType>(filepath);
+		if (!file_stream->is_open()) {
+			throw(std::string("err: failed open ") + filepath);
+		}
+	}
+	//bool ReadFromJsonFile();
+	//bool WriteToJsonFile(const nlohmann::json _updates);
 protected:
-	std::unique_ptr<std::ifstream> file_stream_r;
-	std::unique_ptr<std::ofstream> file_stream_w;
+	std::unique_ptr<StreamType> file_stream;
 	nlohmann::json user_profile;
 	bool file_exist_checker(const std::string filepath);
     std::any json_to_any(const nlohmann::json& _j);
 };
 
-class UserProfile : public ABCJsonHandler {
+class ReadUserProfile : public ABCJsonHandler<std::ifstream> {
 public:
-	UserProfile(const bool rwtype = true);
+	ReadUserProfile();
 	//~UserProfile();
     //bool set_config();
 
 	template <typename T>
 	T load_config(const std::string& conf_key) {
-		if (!file_stream_r) {
+		if (!file_stream) {
 			throw std::runtime_error("err: file-stream doesn't open");
 		}
 
-		*file_stream_r >> user_profile;
+		*file_stream >> user_profile;
 		auto _conf = json_to_any(user_profile[conf_key]);
 		try {
 			return std::any_cast<T>(_conf);
