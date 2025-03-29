@@ -7,6 +7,6 @@
 #include <iostream>
 
 int main() {
-    MediaLib test_m;
+
     return 0;
 }
