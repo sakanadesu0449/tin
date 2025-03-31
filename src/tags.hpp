@@ -1,3 +1,5 @@
+#pragma once
+
 #define TAGLIB_STATIC
 
 #include <taglib/fileref.h>
@@ -5,10 +7,14 @@
 #include <taglib/tpropertymap.h>
 
 #include <filesystem>
+#include <format>
 
-class Tag {
+class AudioTag
+{
 public:
-    explicit Tag(const std::filesystem::path& filepath);
+    explicit AudioTag(const std::filesystem::path &filepath, const bool read_lrc = false);
+
+    ~AudioTag() = default;
 
     std::string get_title();
     std::string get_artist();

@@ -1,14 +1,13 @@
 #pragma once
 #include "curses.h"
 
-
-//block basic utils 
-class LayoutUtils {
-  
+// block basic utils
+class LayoutUtils
+{
 };
 
-class PlaylistBlock {
+class PlaylistBlock
+{
 public:
     PlaylistBlock(void);
 };
-
