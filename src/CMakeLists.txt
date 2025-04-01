@@ -10,7 +10,7 @@ set(TAGLIB_LIBRARIES "${TAGLIB_ROOT}/lib/libtag.a")
 set (CMAKE_CXX_STANDARD 17)
 file (GLOB CODE_SOURCES "*.cpp")
 
-include_directories (${CMAKE_CURRENT_SOURCE_DIR})
+include_directories (${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 add_executable (tin ${CODE_SOURCES})
 
 target_include_directories(tin PRIVATE ${TAGLIB_INCLUDE_DIRS})

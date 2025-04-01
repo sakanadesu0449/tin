@@ -16,12 +16,18 @@ public:
 
     ~AudioTag() = default;
 
-    std::string get_title();
-    std::string get_artist();
-    std::string get_album();
-    int get_duration();
-    int get_bitrate();
+    std::string get_title() const;
+    std::string get_artist() const;
+    std::string get_album() const;
+    int get_duration() const;
+    int get_bitrate() const;
 
 private:
     TagLib::FileRef file_r;
+
+    int duration;
+    int bitrate;
+    std::string title;
+    std::string artist;
+    std::string album;
 };
